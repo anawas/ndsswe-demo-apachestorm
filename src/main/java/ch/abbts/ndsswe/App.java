@@ -3,18 +3,8 @@ package ch.abbts.ndsswe;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
-import org.apache.storm.task.OutputCollector;
-import org.apache.storm.task.TopologyContext;
-import org.apache.storm.testing.TestWordSpout;
-import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.TopologyBuilder;
-import org.apache.storm.topology.base.BaseRichBolt;
-import org.apache.storm.tuple.Fields;
-import org.apache.storm.tuple.Tuple;
-import org.apache.storm.tuple.Values;
 import org.apache.storm.utils.Utils;
-
-import java.util.Map;
 
 /**
  * Hello world!
@@ -24,9 +14,9 @@ public class App {
     public static void main(String[] args) throws Exception {
         TopologyBuilder builder = new TopologyBuilder();
 
-        builder.setSpout("word", new TestWordSpout(), 10);
-        builder.setBolt("exclaim1", new ExclamationBolt(), 3).shuffleGrouping("word");
-        builder.setBolt("question", new QuestionBolt(), 2).shuffleGrouping("exclaim1");
+        builder.setSpout("clickstream", new ClickstreamSpout(), 10);
+        builder.setBolt("extract1", new RefererExtraction(), 3).shuffleGrouping("clickstream");
+        builder.setBolt("count", new RefererCount(), 2).shuffleGrouping("extract1");
 
         Config conf = new Config();
         conf.setDebug(true);
@@ -39,7 +29,8 @@ public class App {
 
             LocalCluster cluster = new LocalCluster();
             cluster.submitTopology("test", conf, builder.createTopology());
-            Utils.sleep(10 * 1000);
+            // let it run for 1 min.
+            Utils.sleep(60 * 1000);
             cluster.killTopology("test");
             cluster.shutdown();
         }

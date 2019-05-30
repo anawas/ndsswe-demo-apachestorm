@@ -10,20 +10,23 @@ import org.apache.storm.tuple.Values;
 
 import java.util.Map;
 
-public class ExclamationBolt extends BaseRichBolt {
-    OutputCollector _collector;
+public class RefererExtraction extends BaseRichBolt {
+    OutputCollector collector;
 
     public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
-        _collector = collector;
+        this.collector = collector;
     }
 
     public void execute(Tuple tuple) {
-        _collector.emit(tuple, new Values(tuple.getString(0) + "!!!"));
-        _collector.ack(tuple);
+        String line = tuple.getString(0);
+        String[] entities = line.split("\\t");
+
+        collector.emit(tuple, new Values(entities[3]));
+        collector.ack(tuple);
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("word"));
+        declarer.declare(new Fields("referer"));
     }
 }
 
