@@ -22,7 +22,7 @@ public class ClickstreamSpout extends BaseRichSpout {
     public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutOutputCollector) {
         collector = spoutOutputCollector;
         try {
-            br = new BufferedReader(new FileReader(("/Volumes/Videos/DataScience/clickstream/2015_01_en_clickstream.tsv")));
+            br = new BufferedReader(new FileReader(("/path/to/clickstream.tsv")));
         } catch (FileNotFoundException e) {
             System.out.println("ERROR -- Could not open input stream");;
             System.exit(1);
