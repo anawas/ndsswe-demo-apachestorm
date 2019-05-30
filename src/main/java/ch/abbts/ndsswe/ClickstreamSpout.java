@@ -30,6 +30,7 @@ public class ClickstreamSpout extends BaseRichSpout {
     }
 
     public void nextTuple() {
+        // in order to see whats happens we slow down the processing
         Utils.sleep(1000);
         try {
             String line = br.readLine();
