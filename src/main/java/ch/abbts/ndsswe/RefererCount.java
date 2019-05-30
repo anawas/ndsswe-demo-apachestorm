@@ -25,7 +25,7 @@ public class RefererCount extends BaseRichBolt {
         if(count == null) count = 0;
         count++;
         counts.put(referer, count);
-
+        System.out.println(String.format("%s : %d", referer, count));
         _collector.emit(tuple, new Values(referer, count));
         _collector.ack(tuple);
     }

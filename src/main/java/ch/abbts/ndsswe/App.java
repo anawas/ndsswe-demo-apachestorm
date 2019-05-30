@@ -19,7 +19,7 @@ public class App {
         builder.setBolt("count", new RefererCount(), 2).shuffleGrouping("extract1");
 
         Config conf = new Config();
-        conf.setDebug(true);
+        conf.setDebug(false);
 
         if (args != null && args.length > 0) {
             conf.setNumWorkers(3);
